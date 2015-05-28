@@ -86,6 +86,9 @@ grails.hibernate.pass.readonly = false
 grails.hibernate.osiv.readonly = false
 
 environments {
+    test{
+      grails.logging.jul.usebridge = true
+    }
     development {
         grails.logging.jul.usebridge = true
     }
