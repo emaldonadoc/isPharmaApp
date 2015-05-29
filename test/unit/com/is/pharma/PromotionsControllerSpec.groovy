@@ -1,5 +1,6 @@
 package com.is.pharma
 
+import com.is.pharma.model.Images
 import com.is.pharma.model.Promotions
 import grails.converters.JSON
 import grails.test.mixin.TestFor
@@ -16,18 +17,20 @@ class PromotionsControllerSpec extends Specification {
 
     def setup(){
         mockDomain(Promotions)
+        mockDomain(Images)
     }
 
 	void "Get promotion list"() {
       setup:
+        def image = new Images(extention: 'ext', image: "hereComeImageBase64")
         def promoCreated = new Promotions(
                 date: new Date(),
                 description: "Test promotion description",
-                shortDescription: "Test").save(flush:true)
+                shortDescription: "Test", image:image).save(flush:true)
         def promoCreated2 =new Promotions(
                 date: new Date(),
                 description: "Test promotion description2",
-                shortDescription: "Test2").save(flush:true)
+                shortDescription: "Test2", image: image).save(flush:true)
 
       when:
         controller.list()
