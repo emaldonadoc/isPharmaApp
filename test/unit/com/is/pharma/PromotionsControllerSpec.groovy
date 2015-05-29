@@ -4,6 +4,7 @@ import com.is.pharma.model.Image
 import com.is.pharma.model.Promotion
 import exceptions.BadRequestException
 import grails.converters.JSON
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
@@ -16,12 +17,11 @@ import spock.lang.Unroll
  */
 @TestFor(PromotionsController)
 @TestMixin(DomainClassUnitTestMixin)
+@Mock([Promotion, Image])
 class PromotionsControllerSpec extends Specification {
 
     def setup(){
-        mockDomain(Promotion)
-        mockDomain(Image)
-        mockForConstraintsTests(PromotionUpdateCommand)
+      mockForConstraintsTests(PromotionUpdateCommand)
     }
 
 	void "Get promotion list"() {
@@ -66,6 +66,11 @@ class PromotionsControllerSpec extends Specification {
        where:
          promoCommand                       || statusExpect
          [:]                                || 400
+         [date: new Date()]                 || 400
          [id:1, date: new Date().minus(100)]|| 400
+         [id:1, date: new Date(), image: ""]|| 400
+         [id:1, date: new Date(), description: ""]|| 400
+         [id:1, date: new Date(), shortDescription: ""]|| 400
+
    }
 }
