@@ -1,4 +1,4 @@
-package com.is.pharma
+package com.is.pharma.model
 
 class Promotions {
 

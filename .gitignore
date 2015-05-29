@@ -1,4 +1,6 @@
+*.iml
 .git/*
+.idea/*
 target/*
 .project
 .classpath

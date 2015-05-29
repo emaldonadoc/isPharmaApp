@@ -10,6 +10,6 @@ class UrlMappings {
         "/"(view:"/index")
         "500"(view:'/error')
 
-				"/promotion"(controller:"promotions", action:"list")
+        "/promotion"(controller:"promotion", action:"list")
 	}
 }
