@@ -1,6 +1,6 @@
 package com.is.pharma.model
 
-class Images {
+class Image {
 
     String image
     String extention

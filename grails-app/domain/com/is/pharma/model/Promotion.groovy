@@ -1,11 +1,11 @@
 package com.is.pharma.model
 
-class Promotions {
+class Promotion {
 
     Date date
     String description
     String shortDescription
-    Images image
+    Image image
 
     static constraints = {
       date nullable: false
