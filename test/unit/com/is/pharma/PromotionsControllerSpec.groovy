@@ -51,7 +51,7 @@ class PromotionsControllerSpec extends Specification {
 	}
 
    @Unroll
-   void "Assert petitions with command #promoCommand"(){
+   void "Assert bad petitions with command #promoCommand"(){
        setup:
          PromotionUpdateCommand cmd = new PromotionUpdateCommand(promoCommand)
 
