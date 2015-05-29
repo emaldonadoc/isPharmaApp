@@ -21,8 +21,8 @@ class PromotionsController {
 
     def update(PromotionUpdateCommand cmd){
         def respond
-        log.info "COMMAND ENTRY  --->  ${cmd.hasErrors()} ---${cmd.validate()}"
-        if(cmd.hasErrors() || cmd.validate()) {
+        log.warn("COMMAND RECEIVE ---> ${cmd.dump()}")
+        if(cmd.hasErrors() || !cmd.validate()) {
             response.sendError( 400,"Validation exception.Bad Request")
             throw new BadRequestException("Validation update error", cmd.errors)
         }
@@ -43,7 +43,10 @@ class PromotionUpdateCommand{
     Image image
 
     static constraints = {
-      id(blank:false)
+      id(nullable: false, blank:false)
       date(min: new Date().minus(15), max: new Date().plus(150))
+      description(nullable:true)
+      shortDescription(nullable:true)
+      image(nullable:true)
     }
 }

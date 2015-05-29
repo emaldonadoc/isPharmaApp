@@ -7,20 +7,21 @@ import grails.converters.JSON
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
-import grails.test.mixin.web.ControllerUnitTestMixin
 import isphama.PromotionsService
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(PromotionsController)
-@TestMixin([DomainClassUnitTestMixin,ControllerUnitTestMixin])
+@TestMixin(DomainClassUnitTestMixin)
 class PromotionsControllerSpec extends Specification {
 
     def setup(){
         mockDomain(Promotion)
         mockDomain(Image)
+        mockForConstraintsTests(PromotionUpdateCommand)
     }
 
 	void "Get promotion list"() {
@@ -49,28 +50,23 @@ class PromotionsControllerSpec extends Specification {
         assert promo2.shortDescription == promoCreated2.shortDescription
 	}
 
-   void "No promotion update with bad request"(){
-       when:
-         controller.update()
-
-       then:
-         assert response.status == 400
-         assert response.errorMessage == "Validation exception.Bad Request"
-         thrown(BadRequestException)
-   }
-
-   void "No promotion update with bad date rate"(){
+   @Unroll
+   void "Assert petitions with command #promoCommand"(){
        setup:
-        /* def promo2Update =
-               new Promotion(date:new Date().minus(20), description: "desc", shortDescription: "short").save(flush: true)
-         PromotionsService promotionsService = Mock()
-         promotionsService.updatePromotion {-> promo2Update}*/
-         def cmd = new PromotionUpdateCommand(id:1,date: new Date().minus(30))
+         PromotionUpdateCommand cmd = new PromotionUpdateCommand(promoCommand)
 
        when:
          controller.update(cmd)
 
        then:
-         assert response.status == 400
+         assert response.status == statusExpect
+         assert response.errorMessage == "Validation exception.Bad Request"
+         thrown(BadRequestException)
+
+       where:
+         promoCommand                       || statusExpect
+         [:]                                || 400
+         [id:1, date: new Date().minus(100)]|| 400
+
    }
 }
