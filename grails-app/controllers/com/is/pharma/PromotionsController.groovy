@@ -45,8 +45,8 @@ class PromotionUpdateCommand{
     static constraints = {
       id(nullable: false, blank:false)
       date(min: new Date().minus(15), max: new Date().plus(150))
-      description(nullable:true)
-      shortDescription(nullable:true)
-      image(nullable:true)
+      description(nullable:true, blank:false)
+      shortDescription(nullable:true, blank:false)
+      image(nullable:true, blank: false)
     }
 }

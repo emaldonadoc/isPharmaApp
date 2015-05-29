@@ -67,6 +67,5 @@ class PromotionsControllerSpec extends Specification {
          promoCommand                       || statusExpect
          [:]                                || 400
          [id:1, date: new Date().minus(100)]|| 400
-
    }
 }
