@@ -8,6 +8,7 @@ import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
 import grails.test.mixin.web.ControllerUnitTestMixin
+import isphama.PromotionsService
 import spock.lang.Specification
 
 /**
@@ -56,5 +57,20 @@ class PromotionsControllerSpec extends Specification {
          assert response.status == 400
          assert response.errorMessage == "Validation exception.Bad Request"
          thrown(BadRequestException)
+   }
+
+   void "No promotion update with bad date rate"(){
+       setup:
+        /* def promo2Update =
+               new Promotion(date:new Date().minus(20), description: "desc", shortDescription: "short").save(flush: true)
+         PromotionsService promotionsService = Mock()
+         promotionsService.updatePromotion {-> promo2Update}*/
+         def cmd = new PromotionUpdateCommand(id:1,date: new Date().minus(30))
+
+       when:
+         controller.update(cmd)
+
+       then:
+         assert response.status == 400
    }
 }
