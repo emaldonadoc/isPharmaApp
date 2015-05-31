@@ -51,7 +51,7 @@ class PromotionsControllerSpec extends Specification {
 	}
 
    @Unroll
-   void "Assert bad petitions with command #promoCommand"(){
+   void "Assert bad petitions - #message"(){
        setup:
          PromotionUpdateCommand cmd = new PromotionUpdateCommand(promoCommand)
 
@@ -59,18 +59,38 @@ class PromotionsControllerSpec extends Specification {
          controller.update(cmd)
 
        then:
-         assert response.status == statusExpect
+         assert response.status == 400
          assert response.errorMessage == "Validation exception.Bad Request"
          thrown(BadRequestException)
 
        where:
-         promoCommand                       || statusExpect
-         [:]                                || 400
-         [date: new Date()]                 || 400
-         [id:1, date: new Date().minus(100)]|| 400
-         [id:1, date: new Date(), image: ""]|| 400
-         [id:1, date: new Date(), description: ""]|| 400
-         [id:1, date: new Date(), shortDescription: ""]|| 400
+         promoCommand                                                                    || message
+         [:]                                                                             || "Null object"
+         //[id:1]                                                                          || "With only id"
+         [date:new Date(),description:"description", shortDescription:"shortDescription"]|| "Without id"
+         [id:1,date: new Date().minus(100)]                                              || "Date no valid"
 
+
+   }
+
+   void "Call service with good request and return promo updated"(){
+       setup:
+         def image = new Image(extention: 'ext', image: "hereComeImageBase64")
+         def promo = new Promotion(
+                   date: new Date(),
+                   description: "Test promotion description",
+                   shortDescription: "Test", image:image).save(flush:true)
+         def promotionsServiceMock = Mock(PromotionsService)
+         promotionsServiceMock.updatePromotion(_)>>{-> promo}
+         def cmd = new PromotionUpdateCommand([id:promo.id, description: "descripton"])
+         controller.promotionsService = promotionsServiceMock
+
+
+       when:
+         controller.update(cmd)
+
+       then:
+         1 * promotionsServiceMock.updatePromotion(cmd)
+         assert response.status == 200
    }
 }

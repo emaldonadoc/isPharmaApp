@@ -20,13 +20,13 @@ class PromotionsController {
     }
 
     def update(PromotionUpdateCommand cmd){
-        def respond
+        def respond = ""
         if(cmd.hasErrors() || !cmd.validate()) {
             response.sendError( 400,"Validation exception.Bad Request")
             throw new BadRequestException("Validation update error", cmd.errors)
         }
 
-        //respond = promotionsService.updatePromotion(cmd)
+        respond = (promotionsService.updatePromotion(cmd) as JSON).toString()
 
         render(contentType: 'application/json', text: respond)
     }
@@ -39,13 +39,17 @@ class PromotionUpdateCommand{
     Date date
     String description
     String shortDescription
-    Image image
+    String image
 
     static constraints = {
       id(nullable: false, blank:false)
-      date(min: new Date().minus(15), max: new Date().plus(150))
-      description(blank:false)
-      shortDescription(blank:false)
-      image(blank: false)
+      description(nullable: true)
+      shortDescription(nullable: true)
+      image(nullable: true)
+      date(nullable: true,  validator: { val, object ->
+        if(val){
+          return val > new Date().minus(1) && val < new Date().plus(150)
+        }
+      })
     }
 }
