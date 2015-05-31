@@ -20,6 +20,7 @@ import spock.lang.Unroll
 @Mock([Promotion, Image])
 class PromotionsControllerSpec extends Specification {
 
+
     def setup(){
       mockForConstraintsTests(PromotionUpdateCommand)
     }
@@ -66,14 +67,11 @@ class PromotionsControllerSpec extends Specification {
        where:
          promoCommand                                                                    || message
          [:]                                                                             || "Null object"
-         //[id:1]                                                                          || "With only id"
          [date:new Date(),description:"description", shortDescription:"shortDescription"]|| "Without id"
          [id:1,date: new Date().minus(100)]                                              || "Date no valid"
-
-
    }
 
-   void "Call service with good request and return promo updated"(){
+   void "Call service with good request"(){
        setup:
          def image = new Image(extention: 'ext', image: "hereComeImageBase64")
          def promo = new Promotion(
@@ -84,7 +82,6 @@ class PromotionsControllerSpec extends Specification {
          promotionsServiceMock.updatePromotion(_)>>{-> promo}
          def cmd = new PromotionUpdateCommand([id:promo.id, description: "descripton"])
          controller.promotionsService = promotionsServiceMock
-
 
        when:
          controller.update(cmd)
