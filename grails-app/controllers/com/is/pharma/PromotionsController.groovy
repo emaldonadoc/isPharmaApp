@@ -1,6 +1,4 @@
 package com.is.pharma
-
-import com.is.pharma.model.Image
 import com.is.pharma.model.Promotion
 import exceptions.BadRequestException
 import grails.converters.JSON
@@ -48,7 +46,7 @@ class PromotionUpdateCommand{
       image(nullable:true,validator:{val-> if(val){val.length()>=20}})
       date(nullable:true,  validator: { val->
         if(val){
-          return val > new Date().minus(1) && val < new Date().plus(150)
+            (val > new Date().minus(1) && val < new Date().plus(150))
         }
       })
     }

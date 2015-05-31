@@ -20,7 +20,6 @@ import spock.lang.Unroll
 @Mock([Promotion, Image])
 class PromotionsControllerSpec extends Specification {
 
-
     def setup(){
       mockForConstraintsTests(PromotionUpdateCommand)
     }
