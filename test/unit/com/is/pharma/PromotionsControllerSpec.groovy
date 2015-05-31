@@ -80,8 +80,7 @@ class PromotionsControllerSpec extends Specification {
                    description: "Test promotion description",
                    shortDescription: "Test", image:image).save(flush:true)
          def promotionsServiceMock = Mock(PromotionsService)
-         promotionsServiceMock.updatePromotion(_)>>{-> promo}
-         def cmd = new PromotionUpdateCommand([id:1, description: "description"])
+         def cmd = new PromotionUpdateCommand([id:promo.id, description: "description"])
          controller.promotionsService = promotionsServiceMock
 
        when:
