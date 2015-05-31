@@ -65,22 +65,24 @@ class PromotionsControllerSpec extends Specification {
          thrown(BadRequestException)
 
        where:
-         promoCommand                                                                    || message
-         [:]                                                                             || "Null object"
-         [date:new Date(),description:"description", shortDescription:"shortDescription"]|| "Without id"
-         [id:1,date: new Date().minus(100)]                                              || "Date no valid"
+         promoCommand                                                                        || message
+         [:]                                                                                 || "Null object"
+         [id:1]                                                                              || "Only Id"
+         [id:1,date: new Date().minus(100)]                                                  || "Date no valid"
+         [date:new Date(),description:"LongDescription", shortDescription:"shortDescription"]|| "Without id"
    }
 
    void "Call service with good request"(){
        setup:
          def image = new Image(extention: 'ext', image: "hereComeImageBase64")
          def promo = new Promotion(
+                   id:1,
                    date: new Date(),
                    description: "Test promotion description",
                    shortDescription: "Test", image:image).save(flush:true)
          def promotionsServiceMock = Mock(PromotionsService)
          promotionsServiceMock.updatePromotion(_)>>{-> promo}
-         def cmd = new PromotionUpdateCommand([id:promo.id, description: "descripton"])
+         def cmd = new PromotionUpdateCommand([id:1, description: "description"])
          controller.promotionsService = promotionsServiceMock
 
        when:

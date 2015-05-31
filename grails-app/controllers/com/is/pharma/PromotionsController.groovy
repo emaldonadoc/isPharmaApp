@@ -25,9 +25,7 @@ class PromotionsController {
             response.sendError( 400,"Validation exception.Bad Request")
             throw new BadRequestException("Validation update error", cmd.errors)
         }
-
         respond = (promotionsService.updatePromotion(cmd) as JSON).toString()
-
         render(contentType: 'application/json', text: respond)
     }
 
@@ -42,11 +40,13 @@ class PromotionUpdateCommand{
     String image
 
     static constraints = {
-      id(nullable: false, blank:false)
-      description(nullable: true)
-      shortDescription(nullable: true)
-      image(nullable: true)
-      date(nullable: true,  validator: { val, object ->
+      id(nullable: false, validator: { val, obj ->
+        obj.description || obj.shortDescription || obj.image || obj.date
+      })
+      description(nullable:true,validator:{val->if(val){val.length()>=10}})
+      shortDescription(nullable:true,validator:{val-> if(val){val.length()>=5}})
+      image(nullable:true,validator:{val-> if(val){val.length()>=20}})
+      date(nullable:true,  validator: { val->
         if(val){
           return val > new Date().minus(1) && val < new Date().plus(150)
         }
