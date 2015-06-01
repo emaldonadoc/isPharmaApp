@@ -40,7 +40,6 @@ grails.project.dependency.resolution = {
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.2'
         test "org.grails:grails-datastore-test-support:1.0.2-grails-2.4"
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
-
     }
 
     plugins {
@@ -55,6 +54,7 @@ grails.project.dependency.resolution = {
         compile ":asset-pipeline:2.1.5"
         compile ":wslite:0.7.2.0"
         compile ':functional-spock:0.6'
+        compile ":build-test-data:2.4.0"
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate4:4.3.8.1" // or ":hibernate:3.6.10.18"

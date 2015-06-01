@@ -1,5 +1,7 @@
-package com.is.pharma
+package com.is.pharma.controllers
 
+import com.is.pharma.PromotionUpdateCommand
+import com.is.pharma.PromotionsController
 import com.is.pharma.model.Image
 import com.is.pharma.model.Promotion
 import exceptions.BadRequestException
@@ -8,7 +10,7 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
-import isphama.PromotionsService
+import com.is.pharma.PromotionsService
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -87,7 +89,7 @@ class PromotionsControllerSpec extends Specification {
          controller.update(cmd)
 
        then:
-         1 * promotionsServiceMock.updatePromotion(cmd)
+         1 * promotionsServiceMock.updatePromotion(cmd.id,cmd)
          assert response.status == 200
    }
 }

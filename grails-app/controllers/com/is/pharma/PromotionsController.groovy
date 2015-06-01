@@ -3,8 +3,6 @@ import com.is.pharma.model.Promotion
 import exceptions.BadRequestException
 import grails.converters.JSON
 import grails.validation.Validateable
-import isphama.PromotionsService
-
 
 class PromotionsController {
     static allowedMethods = [list:'GET']
@@ -23,7 +21,7 @@ class PromotionsController {
             response.sendError( 400,"Validation exception.Bad Request")
             throw new BadRequestException("Validation update error", cmd.errors)
         }
-        respond = (promotionsService.updatePromotion(cmd) as JSON).toString()
+        respond = (promotionsService.updatePromotion(cmd.id, cmd) as JSON).toString()
         render(contentType: 'application/json', text: respond)
     }
 
